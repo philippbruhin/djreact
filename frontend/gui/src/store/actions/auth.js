@@ -39,7 +39,7 @@ export const checkAuthTimeout = expirationTime => {
 
 export const authLogin = (username, password) => {
     return dispatch => {
-        dispatch(authSTart());
+        dispatch(authStart());
         axios.post('http://127.0.0.1:8000/rest-auth/login', {
             username: username,  
             password: password
@@ -79,5 +79,22 @@ export const authSignup = (username, email, password1, password2) => {
         .catch(err => {
             dispatch(authFail(err))
         })
+    }
+}
+
+export const authCheckState = () => {
+    return dispatch => {
+        const token = localStorage.getItem('token');
+        if (token === undefined) {
+            dispatch(logout());
+        } else {
+            const expirationDate = new Date(localStorage.getItem('expirationDate'));
+            if ( expirationDate <= new Date() ) {
+                dispatch(logout());
+            } else {
+                dispatch(authSuccess(token));
+                dispatch(checkAuthTimeout( (expirationDate.getTime() - new Date().getTime()) / 1000) );
+            }
+        }
     }
 }
