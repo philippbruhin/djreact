@@ -6,20 +6,19 @@ import 'antd/dist/antd.css';
 import * as actions from './store/actions/auth';
 
 import CustomLayout from './containers/Layout';
-import ArticleList from './containers/ArticleListView';
 
 class App extends Component {
 
   componentDidMount() {
     this.props.onTryAutoSignup();
   }
-  
+
   render() {
     return (
       <div>
         <Router>
           <CustomLayout {...this.props}>
-            <BaseRouter />
+              <BaseRouter />
           </CustomLayout>
         </Router>
       </div>
